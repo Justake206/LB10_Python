@@ -1,0 +1,87 @@
+{% extends 'lex/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block header %}🏠 Главная страница Lex{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-4">
+        <h2>Добро пожаловать в приложение Lex!</h2>
+        <p class="lead">Система управления юридическими делами</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">📁 Судебные дела</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ cases_count }} дел</h5>
+                <p class="card-text">В базе данных</p>
+                <a href="/lex/cases/" class="btn btn-light">Перейти к делам</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">🏷️ Области практики</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ practice_areas_count }} областей</h5>
+                <p class="card-text">Юридической специализации</p>
+                <a href="/lex/practice-areas/" class="btn btn-light">Просмотреть</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">📰 Новости</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ news_count }} новостей</h5>
+                <p class="card-text">Опубликовано на сайте</p>
+                <a href="/lex/news/" class="btn btn-light">Читать новости</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if latest_news %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title mb-0">📢 Последние новости</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for item in latest_news %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text text-muted small">
+                                    📅 {{ item.created_at|date:"d.m.Y H:i" }}
+                                </p>
+                                <p class="card-text">
+                                    {{ item.content|truncatewords:20 }}
+                                </p>
+                                <a href="/lex/news/{{ item.id }}/" class="btn btn-sm btn-primary">
+                                    Читать далее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/lex/news/" class="btn btn-outline-primary">
+                    Все новости →
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
