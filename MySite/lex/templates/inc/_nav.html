@@ -1,0 +1,45 @@
+<!-- НАВИГАЦИОННАЯ ПАНЕЛЬ -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'lex:index' %}">🏛️ Новостной сайт Lex</a>
+
+        <!-- Кнопка для мобильной версии -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">🏠 Главная сайта</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lex:index' %}">📱 Главная Lex</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lex:news_list' %}">📰 Новости</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lex:case_list' %}">📁 Судебные дела</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lex:about' %}">ℹ️ О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lex:test' %}">🧪 Тестовая</a>
+                </li>
+            </ul>
+
+            <!-- Ссылка на админку -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light btn-sm" href="/admin/">
+                        ⚙️ Админка
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

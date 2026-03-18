@@ -1,0 +1,12 @@
+<!-- lex/templates/inc/_sidebar.html -->
+{% load lex_tags %}
+
+<div class="sidebar">
+    <h3 class="sidebar-title">📋 Категории новостей</h3>
+
+    {# Используем inclusion-тег для отображения категорий #}
+    {% show_categories "Текущие категории" %}
+
+    {# Показываем последние новости через inclusion-тег #}
+    {% show_latest_news 3 %}
+</div>

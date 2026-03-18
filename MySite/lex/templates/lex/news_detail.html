@@ -1,0 +1,81 @@
+<!-- lex/templates/lex/news_detail.html -->
+{% extends 'lex/base.html' %}
+{% load lex_tags %}
+
+{% block title %}{{ news_item.title }}{% endblock %}
+
+{% block header %}📖 {{ news_item.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <!-- Мета-информация -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="text-muted">
+                            <i class="bi bi-calendar"></i>
+                            <strong>Дата публикации:</strong>
+                            {{ news_item.created_at|date:"d.m.Y в H:i" }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted text-end">
+                            {% if news_item.is_published %}
+                            <span class="badge bg-success">✅ Опубликовано</span>
+                            {% else %}
+                            <span class="badge bg-secondary">📝 Черновик</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Категория -->
+                {% if news_item.category %}
+                <div class="mb-4">
+                    <span class="badge bg-info">
+                        🏷️ <a href="{% url 'lex:news_by_category' news_item.category.id %}" class="text-white text-decoration-none">
+                            {{ news_item.category.name }}
+                        </a>
+                    </span>
+                </div>
+                {% endif %}
+
+                <!-- Содержание -->
+                <div class="mb-4">
+                    {{ news_item.content|linebreaks }}
+                </div>
+
+                <!-- Изображение -->
+                {% if news_item.photo %}
+                <div class="text-center mb-4">
+                    <img src="{{ news_item.photo.url }}"
+                         alt="{{ news_item.title }}"
+                         class="img-fluid rounded"
+                         style="max-height: 400px;">
+                    <p class="text-muted small mt-2">📷 Изображение к новости</p>
+                </div>
+                {% endif %}
+
+                <!-- Кнопки навигации -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'lex:news_list' %}" class="btn btn-secondary">
+                        ← Назад к списку новостей
+                    </a>
+
+                    <div>
+                        <a href="/admin/lex/news/{{ news_item.id }}/change/"
+                           class="btn btn-warning" target="_blank">
+                            ✏️ Редактировать
+                        </a>
+                        <a href="{% url 'lex:index' %}" class="btn btn-primary ms-2">
+                            🏠 На главную
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+<!-- lex/templates/lex/test.html -->
+{% extends 'lex/base.html' %}
+{% load lex_tags %}
+
+{% block title %}Тестовая страница{% endblock %}
+
+{% block header %}🧪 Тестовая страница{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-success">
+            <h4 class="alert-heading">Работает!</h4>
+            <p>Приложение Lex функционирует нормально.</p>
+            <hr>
+            <p class="mb-0">
+                <a href="{% url 'lex:index' %}" class="btn btn-primary">🏠 На главную Lex</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

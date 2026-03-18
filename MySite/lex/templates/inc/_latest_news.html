@@ -1,0 +1,19 @@
+<!-- lex/templates/inc/_latest_news.html -->
+{% if latest_news %}
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="card-title mb-0">📢 Последние новости</h5>
+    </div>
+    <div class="list-group list-group-flush">
+        {% for news in latest_news %}
+        <a href="{% url 'lex:news_detail' news.id %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">{{ news.title|truncatechars:40 }}</h6>
+                <small class="text-muted">{{ news.created_at|date:"d.m.Y" }}</small>
+            </div>
+            <small class="text-muted">{{ news.content|truncatewords:10 }}</small>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

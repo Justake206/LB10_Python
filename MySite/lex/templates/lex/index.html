@@ -1,9 +1,13 @@
+<!-- lex/templates/lex/index.html -->
 {% extends 'lex/base.html' %}
+{% load lex_tags %}
 
 {% block title %}{{ title }}{% endblock %}
+
 {% block header %}🏠 Главная страница Lex{% endblock %}
 
 {% block content %}
+<!-- Приветственный блок -->
 <div class="row">
     <div class="col-md-12 text-center mb-4">
         <h2>Добро пожаловать в приложение Lex!</h2>
@@ -11,6 +15,7 @@
     </div>
 </div>
 
+<!-- Карточки со статистикой -->
 <div class="row mb-4">
     <div class="col-md-4">
         <div class="card text-white bg-primary mb-3">
@@ -18,7 +23,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ cases_count }} дел</h5>
                 <p class="card-text">В базе данных</p>
-                <a href="/lex/cases/" class="btn btn-light">Перейти к делам</a>
+                <a href="{% url 'lex:case_list' %}" class="btn btn-light">Перейти к делам</a>
             </div>
         </div>
     </div>
@@ -29,7 +34,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ practice_areas_count }} областей</h5>
                 <p class="card-text">Юридической специализации</p>
-                <a href="/lex/practice-areas/" class="btn btn-light">Просмотреть</a>
+                <a href="{% url 'lex:practice_areas_list' %}" class="btn btn-light">Просмотреть</a>
             </div>
         </div>
     </div>
@@ -40,12 +45,13 @@
             <div class="card-body">
                 <h5 class="card-title">{{ news_count }} новостей</h5>
                 <p class="card-text">Опубликовано на сайте</p>
-                <a href="/lex/news/" class="btn btn-light">Читать новости</a>
+                <a href="{% url 'lex:news_list' %}" class="btn btn-light">Читать новости</a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Блок последних новостей -->
 {% if latest_news %}
 <div class="row">
     <div class="col-md-12">
@@ -57,16 +63,25 @@
                 <div class="row">
                     {% for item in latest_news %}
                     <div class="col-md-4 mb-3">
-                        <div class="card h-100">
+                        <div class="card h-100 news-card">
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.title }}</h5>
                                 <p class="card-text text-muted small">
                                     📅 {{ item.created_at|date:"d.m.Y H:i" }}
                                 </p>
+                                {% if item.category %}
+                                <p class="card-text">
+                                    <span class="badge bg-secondary">
+                                        <a href="{% url 'lex:news_by_category' item.category.id %}" class="text-white text-decoration-none">
+                                            🏷️ {{ item.category.name }}
+                                        </a>
+                                    </span>
+                                </p>
+                                {% endif %}
                                 <p class="card-text">
                                     {{ item.content|truncatewords:20 }}
                                 </p>
-                                <a href="/lex/news/{{ item.id }}/" class="btn btn-sm btn-primary">
+                                <a href="{% url 'lex:news_detail' item.id %}" class="btn btn-sm btn-primary">
                                     Читать далее
                                 </a>
                             </div>
@@ -76,7 +91,7 @@
                 </div>
             </div>
             <div class="card-footer text-center">
-                <a href="/lex/news/" class="btn btn-outline-primary">
+                <a href="{% url 'lex:news_list' %}" class="btn btn-outline-primary">
                     Все новости →
                 </a>
             </div>
