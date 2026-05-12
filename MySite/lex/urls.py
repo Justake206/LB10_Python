@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 # app_name позволяет использовать имена маршрутов с префиксом 'lex:'
 # Например: {% url 'lex:news_detail' news.id %}
 app_name = 'lex'
@@ -34,4 +35,9 @@ urlpatterns = [
     # ТЕСТОВЫЕ МАРШРУТЫ ИЗ ЛАБОРАТОРНОЙ 6
     path('test/bootstrap/', views.test_bootstrap, name='test_bootstrap'),
     path('test/template-tags/', views.test_template_tags, name='test_template_tags'),
+
+    # ЗАДАНИЕ 9: МАРШРУТЫ ДЛЯ РЕДИРЕКТА
+    path('go-to-category/<int:category_id>/', views.redirect_to_category, name='go_to_category'),
+    path('go-to-news/<int:news_id>/', views.redirect_to_news, name='go_to_news'),
+    path('go-home/', views.redirect_to_home, name='go_home'),
 ]

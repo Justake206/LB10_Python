@@ -1,8 +1,13 @@
+# lex/models.py
 from django.db import models
+from django.urls import reverse  # НОВЫЙ ИМПОРТ для обратного разрешения URL
 
+# Create your models here.
 
 class PracticeArea(models.Model):
-    """Области юридической практики"""
+    """
+    Модель для областей юридической практики (категории новостей)
+    """
     name = models.CharField(
         max_length=150,
         db_index=True,
@@ -16,6 +21,15 @@ class PracticeArea(models.Model):
     def __str__(self):
         return self.name
 
+    # метод для лабораторной работы 10
+    def get_absolute_url(self):
+        """
+        Метод обратного разрешения URL для категории.
+        Возвращает URL на страницу новостей этой категории.
+        Используется в шаблонах вместо тега {% url %}.
+        """
+        return reverse('lex:news_by_category', kwargs={'category_id': self.pk})
+
     class Meta:
         verbose_name = 'Область практики'
         verbose_name_plural = 'Области практики'
@@ -23,7 +37,9 @@ class PracticeArea(models.Model):
 
 
 class Case(models.Model):
-    """Судебные дела/кейсы"""
+    """
+    Модель для судебных дел/кейсов
+    """
     title = models.CharField(max_length=200, verbose_name='Название дела')
     case_number = models.CharField(
         max_length=50,
@@ -77,12 +93,10 @@ class Case(models.Model):
     def __str__(self):
         return f"{self.case_number}: {self.title}"
 
-    # Метод для отображения в шаблоне (для лабораторной работы 6)
     def get_case_info(self):
         """Возвращает краткую информацию о деле"""
         return f"Дело №{self.case_number} - {self.client}"
 
-    # Метод для определения статуса дела (цвет)
     def get_status_color(self):
         """Возвращает цвет статуса для Bootstrap"""
         colors = {
@@ -100,14 +114,16 @@ class Case(models.Model):
 
 
 class News(models.Model):
-    """Новости юридической фирмы"""
+    """
+    Модель для новостей юридической фирмы
+    """
     title = models.CharField(max_length=200, verbose_name='Заголовок новости')
     content = models.TextField(verbose_name='Содержание новости')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
 
-    # Поле для изображения (добавлено в лабораторной работе 6)
+    # Поле для изображения
     photo = models.ImageField(
         upload_to='news_photos/%Y/%m/%d/',
         blank=True,
@@ -115,7 +131,7 @@ class News(models.Model):
         verbose_name='Изображение новости'
     )
 
-    # Связь с PracticeArea
+    # Связь с PracticeArea (категория новости)
     category = models.ForeignKey(
         PracticeArea,
         on_delete=models.SET_NULL,
@@ -127,9 +143,18 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
-    # Методы для использования в шаблонах (лабораторная работа 6)
+    # новый метод для лб 10
+    def get_absolute_url(self):
+        """
+        Метод обратного разрешения URL для новости.
+        Возвращает URL на детальную страницу новости.
+        Используется в шаблонах вместо тега {% url %}.
+        """
+        return reverse('lex:news_detail', kwargs={'news_id': self.pk})
+
+    # Методы для использования в шаблонах (из лабораторной 6)
     def get_short_title(self):
-        """Метод для получения сокращенного заголовка"""
+        """Метод для получения сокращенного заголовка (первые 30 символов)"""
         if len(self.title) > 30:
             return self.title[:27] + '...'
         return self.title
@@ -145,7 +170,7 @@ class News(models.Model):
         return bool(self.photo)
 
     def get_content_preview(self, words=50):
-        """Возвращает превью контента"""
+        """Возвращает превью контента (первые words слов)"""
         words_list = self.content.split()
         if len(words_list) > words:
             return ' '.join(words_list[:words]) + '...'

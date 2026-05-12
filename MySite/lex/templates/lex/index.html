@@ -57,7 +57,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title mb-0">📢 Последние новости</h3>
+                <h3 class="card-title mb-0"> Последние новости</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -67,12 +67,13 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ item.title }}</h5>
                                 <p class="card-text text-muted small">
-                                    📅 {{ item.created_at|date:"d.m.Y H:i" }}
+                                     {{ item.created_at|date:"d.m.Y H:i" }}
                                 </p>
                                 {% if item.category %}
                                 <p class="card-text">
                                     <span class="badge bg-secondary">
-                                        <a href="{% url 'lex:news_by_category' item.category.id %}" class="text-white text-decoration-none">
+                                        <!-- ИЗМЕНЕНО: используем get_absolute_url -->
+                                        <a href="{{ item.category.get_absolute_url }}" class="text-white text-decoration-none">
                                             🏷️ {{ item.category.name }}
                                         </a>
                                     </span>
@@ -81,7 +82,8 @@
                                 <p class="card-text">
                                     {{ item.content|truncatewords:20 }}
                                 </p>
-                                <a href="{% url 'lex:news_detail' item.id %}" class="btn btn-sm btn-primary">
+                                <!-- ИЗМЕНЕНО: используем get_absolute_url -->
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-sm btn-primary">
                                     Читать далее
                                 </a>
                             </div>

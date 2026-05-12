@@ -3,10 +3,15 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
+#тест кастомной страницы
+from django.conf.urls import handler404
+
+# Кастомная страница 404
+handler404 = 'lex.views.custom_404'
 
 
-# функция для главной страницы
 def home(request):
+    """Главная страница сайта"""
     return HttpResponse("""
     <!DOCTYPE html>
     <html>
@@ -18,12 +23,12 @@ def home(request):
             h1 { color: #333; }
             ul { list-style-type: none; padding: 0; }
             li { margin: 10px 0; }
-            a { 
-                display: block; 
-                padding: 10px 15px; 
-                background: #007bff; 
-                color: white; 
-                text-decoration: none; 
+            a {
+                display: block;
+                padding: 10px 15px;
+                background: #007bff;
+                color: white;
+                text-decoration: none;
                 border-radius: 5px;
                 max-width: 300px;
             }
@@ -49,7 +54,6 @@ def home(request):
                 <li><a href="/lex/test/">🧪 Тестовая страница</a></li>
                 <li><a href="/lex/about/">ℹ️ О нас</a></li>
                 <li><a href="/lex/news/">📰 Список новостей</a></li>
-                <li><a href="/lex/news/1/">📖 Пример детальной страницы</a></li>
             </ul>
         </div>
     </body>
@@ -59,11 +63,13 @@ def home(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('lex/', include('lex.urls')),  # Объединенное приложение lex
-    path('', home, name='home'),  # Главная страница проекта
+    path('lex/', include('lex.urls')),
+    path('', home, name='home'),
 ]
 
 # Добавление маршрутов для медиа-файлов в режиме разработки
+# Это позволяет Django обслуживать загруженные пользователем файлы (изображения)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+    # Также добавляем статические файлы (хотя collectstatic лучше для продакшена)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

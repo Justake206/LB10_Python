@@ -36,7 +36,6 @@
 </div>
 
 {% if news_list %}
-<!-- СЕТКА НОВОСТЕЙ -->
 <div class="row">
     {% for news in news_list %}
     <div class="col-md-6 col-lg-4 mb-4">
@@ -56,7 +55,8 @@
                 {% if news.category %}
                 <p class="card-text">
                     <span class="badge bg-secondary">
-                        <a href="{% url 'lex:news_by_category' news.category.id %}" class="text-white text-decoration-none">
+                        <!-- ИЗМЕНЕНО: используем get_absolute_url -->
+                        <a href="{{ news.category.get_absolute_url }}" class="text-white text-decoration-none">
                             🏷️ {{ news.category.name }}
                         </a>
                     </span>
@@ -80,7 +80,8 @@
 
             <div class="card-footer">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{% url 'lex:news_detail' news.id %}" class="btn btn-primary btn-sm">
+                    <!-- ИЗМЕНЕНО: используем get_absolute_url -->
+                    <a href="{{ news.get_absolute_url }}" class="btn btn-primary btn-sm">
                         📖 Читать далее
                     </a>
 
@@ -94,7 +95,7 @@
     {% endfor %}
 </div>
 
-<!-- ПАГИНАЦИЯ -->
+<!-- Пагинация -->
 {% if paginator.num_pages > 1 %}
 <nav aria-label="Навигация по страницам">
     <ul class="pagination justify-content-center">

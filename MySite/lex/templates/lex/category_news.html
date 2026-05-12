@@ -24,7 +24,6 @@
 </div>
 
 {% if news_list %}
-<!-- СЕТКА НОВОСТЕЙ -->
 <div class="row">
     {% for news in news_list %}
     <div class="col-md-6 mb-4">
@@ -53,7 +52,8 @@
 
             <div class="card-footer">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="{% url 'lex:news_detail' news.id %}" class="btn btn-primary btn-sm">
+                    <!-- ИЗМЕНЕНО: используем get_absolute_url -->
+                    <a href="{{ news.get_absolute_url }}" class="btn btn-primary btn-sm">
                         📖 Читать далее
                     </a>
 
@@ -67,7 +67,7 @@
     {% endfor %}
 </div>
 
-<!-- ПАГИНАЦИЯ -->
+<!-- Пагинация -->
 {% if paginator.num_pages > 1 %}
 <nav aria-label="Навигация по страницам">
     <ul class="pagination justify-content-center">

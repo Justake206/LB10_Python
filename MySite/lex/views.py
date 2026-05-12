@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect  # ДОБАВЛЕН redirect
 from django.http import HttpResponse
+from django.urls import reverse  # ДОБАВЛЕН reverse
 from .models import Case, PracticeArea, News
 from django.core.paginator import Paginator
+
 
 # Функция get_categories_context УДАЛЕНА!
 # Категории теперь получаются через теги в шаблонах (lex_tags.py)
@@ -26,7 +28,6 @@ def index(request):
         'practice_areas_count': practice_areas_count,
         'news_count': news_count,
         'title': 'Главная страница - Lex',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/index.html', context)
 
@@ -37,7 +38,6 @@ def test(request):
     """
     context = {
         'title': 'Тестовая страница',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/test.html', context)
 
@@ -48,7 +48,6 @@ def about(request):
     """
     context = {
         'title': 'О нас - Юридическая фирма "Lex"',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/about.html', context)
 
@@ -76,7 +75,6 @@ def news_list(request):
         'news_count': news_items.count(),
         'title': 'Новости юридической фирмы "Lex"',
         'paginator': paginator,
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/news_list.html', context)
 
@@ -90,7 +88,6 @@ def news_detail(request, news_id):
     context = {
         'news_item': news_item,
         'title': news_item.title,
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/news_detail.html', context)
 
@@ -125,7 +122,6 @@ def news_by_category(request, category_id):
         'title': f'Новости: {category.name}',  # Динамический заголовок
         'paginator': paginator,
         'active_category': category.id,  # Для подсветки активной категории в сайдбаре
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/category_news.html', context)
 
@@ -150,7 +146,6 @@ def case_list(request):
         'cases': cases,
         'practice_areas': practice_areas,
         'title': 'Судебные дела',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/case_list.html', context)
 
@@ -163,7 +158,6 @@ def case_detail(request, case_id):
     context = {
         'case': case,
         'title': f'Дело {case.case_number}',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/case_detail.html', context)
 
@@ -176,7 +170,6 @@ def practice_areas_list(request):
     context = {
         'practice_areas': practice_areas,
         'title': 'Области юридической практики',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/practice_areas.html', context)
 
@@ -188,7 +181,6 @@ def add_case(request):
     """
     context = {
         'title': 'Добавление дела',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/add_case.html', context)
 
@@ -200,7 +192,6 @@ def edit_case(request, case_id):
     context = {
         'title': f'Редактирование дела #{case_id}',
         'case_id': case_id,
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/edit_case.html', context)
 
@@ -211,7 +202,6 @@ def search_cases(request):
     """
     context = {
         'title': 'Поиск дел',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/search_cases.html', context)
 
@@ -238,7 +228,6 @@ def test_bootstrap(request):
     """
     context = {
         'title': 'Тест Bootstrap компонентов',
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/test_bootstrap.html', context)
 
@@ -253,6 +242,52 @@ def test_template_tags(request):
         'title': 'Тест тегов шаблонов',
         'news_items': news_items,
         'test_list': ['Первый', 'Второй', 'Третий', 'Четвертый', 'Пятый'],
-        # **get_categories_context() - УДАЛЕНО!
     }
     return render(request, 'lex/test_template_tags.html', context)
+
+
+# ЗАДАНИЕ 7: КАСТОМНАЯ СТРАНИЦА 404
+
+def custom_404(request, exception):
+    """Кастомная страница 404"""
+    return render(request, 'lex/404.html', status=404)
+
+# ЗАДАНИЕ 9: ИСПОЛЬЗОВАНИЕ reverse ДЛЯ РЕДИРЕКТА
+
+def redirect_to_category(request, category_id):
+    """
+    Перенаправление на страницу категории с помощью reverse.
+    Аргументы:
+        request - объект запроса
+        category_id - ID категории (из URL)
+    """
+    # Строим URL с помощью reverse по имени маршрута
+    url = reverse('lex:news_by_category', kwargs={'category_id': category_id})
+
+    # Перенаправляем пользователя
+    return redirect(url)
+
+
+def redirect_to_news(request, news_id):
+    """
+    Перенаправление на детальную страницу новости.
+    Аргументы:
+        request - объект запроса
+        news_id - ID новости (из URL)
+    """
+    # Строим URL с помощью reverse
+    url = reverse('lex:news_detail', kwargs={'news_id': news_id})
+
+    # Перенаправляем
+    return redirect(url)
+
+
+def redirect_to_home(request):
+    """
+    Перенаправление на главную страницу
+    Возвращает:
+        Редирект на главную страницу Lex
+    """
+    # reverse без параметров
+    url = reverse('lex:index')
+    return redirect(url)

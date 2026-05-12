@@ -1,13 +1,11 @@
 # lex/templatetags/lex_tags.py
 from django import template
-from lex.models import PracticeArea, News
+from ..models import PracticeArea, News
 
 # Регистрируем модуль тегов
 register = template.Library()
 
-# --------------------------------------------
 # ПРОСТОЙ ТЕГ (simple_tag)
-# --------------------------------------------
 
 @register.simple_tag(name='get_categories')
 def get_categories():
@@ -26,9 +24,7 @@ def get_news_count():
     return News.objects.filter(is_published=True).count()
 
 
-# --------------------------------------------
 # ТЕГ ВКЛЮЧЕНИЯ (inclusion_tag)
-# --------------------------------------------
 
 @register.inclusion_tag('inc/_categories_sidebar.html', name='show_categories')
 def show_categories(arg1='Все категории'):

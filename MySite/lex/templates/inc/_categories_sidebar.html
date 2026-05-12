@@ -9,7 +9,8 @@
     {% endif %}
 
     {% for category in categories %}
-    <a href="{% url 'lex:news_by_category' category.id %}"
+    <!-- ИЗМЕНЕНО: используем get_absolute_url вместо тега url -->
+    <a href="{{ category.get_absolute_url }}"
        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
               {% if active_category == category.id %}active{% endif %}">
         {{ category.name }}
